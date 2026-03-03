@@ -55,7 +55,7 @@ static inline int startServerAddrInt(server_t* server, int addr, int port) {
 // it is the function telling you how many bytes of the input were
 // valid ip.
 //
-// The function should be modified to allow the trailing ones place to exceed 1 byte.
+// TODO: The function should be modified to allow the trailing ones place to exceed 1 byte.
 int popIpAddr(char* ip, int* out) {
     char* base = ip;
     int numbersFound = 0;
@@ -171,8 +171,8 @@ static inline int updateClients(server_t* server, int delay) {
     return 0;
 }
 
-// getReadyClient and closeClient work together, and position `iter` to cooperate with one another.
-static inline struct pollfd getReadyClient(server_t* server, clientIter* iter) {
+// getClientIter and closeClientIter work together, and position `iter` to cooperate with one another.
+static inline struct pollfd getClientIter(server_t* server, clientIter* iter) {
     for (;*iter < server->connectionCount; *iter += 1) {
         struct pollfd thisConnection = server->connections[*iter];
         if (!(thisConnection.revents & POLLIN)) continue;

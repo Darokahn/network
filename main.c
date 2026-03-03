@@ -26,11 +26,13 @@ int main(int argc, char* argv[]) {
         updateClients(&server, 100);
         clientIter iter = 0;
         struct pollfd client;
-        while ((client = getReadyClient(&server, &iter)).fd != -1) {
-            char msg[] = "waow";
-            int size = (sizeof msg) - 1;
-            dprintf(client.fd, "HTTP/1.1 200 OK\n\rContent-Type: text/plain\n\rContent-Length: %d\r\n\r\n%s\n", size, msg);
-            closeClientIter(&server, &iter);
+        while ((client = getClientIter(&server, &iter)).fd != -1) {
+            int count = read(client.fd, buffer, sizeof buffer);
+            buffer[count] = 0;
+            char msg[] = "Got your message.\n";
+            dprintf(client.fd, "%s", msg);
+            printf("%d says: %s\n", client.fd, buffer);
+            //closeClientIter(&server, &iter);
         }
     }
 }
